@@ -101,16 +101,28 @@ const getBaseURL = () => {
     return 'https://web-delivery-back.onrender.com'; 
 };
 
-
+// ЖЕСТКО ПРОПИСЫВАЕМ ССЫЛКУ, ЧТОБЫ AXIOS НИКОГДА НЕ ПОЛУЧАЛ UNDEFINED
 const API = axios.create({
-    // Оставляем чистый домен бэкенда
-    //baseURL: 'http://127.0.0.1:8000',
-    baseURL: getBaseURL,
-    timeout: 30000,
+    baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://127.0.0.1:8000'
+        : 'https://onrender.com', 
+    timeout: 30000, // 30 секунд ожидания для прогрева бесплатного Render
     headers: {
         'Content-Type': 'application/json',
     }
 });
+
+
+
+// const API = axios.create({
+//     // Оставляем чистый домен бэкенда
+//     //baseURL: 'http://127.0.0.1:8000',
+//     baseURL: getBaseURL,
+//     timeout: 30000,
+//     headers: {
+//         'Content-Type': 'application/json',
+//     }
+// });
 
 // // 2. Достаем токен DRF напрямую перед созданием инстанса
 // const token = localStorage.getItem('restaurant_token');
