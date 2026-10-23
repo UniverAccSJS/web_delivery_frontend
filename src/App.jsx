@@ -7,7 +7,7 @@ import AppShow from './AppShow'; // Импортируем файл с офор�
 
 import Header from './components/Header';
 import UserProfileModal from './components/UserProfileModal';
-import { fetchOrderDetails } from './api'; // Убедитесь, что импорт функции API на месте
+//import { fetchOrderDetails } from './api'; // Убедитесь, что импорт функции API на месте
 
 
 function App() {
@@ -47,7 +47,38 @@ function App() {
     localStorage.setItem('restaurant_cart', JSON.stringify(cart));
   }, [cart]);
 
-  // Надежный хук загрузки меню с лайками из СУБД
+  // // Надежный хук загрузки меню с лайками из СУБД
+  // useEffect(() => {
+  //   setLoading(true);
+  //   // Берем ID напрямую из стейта, который мы гарантированно восстановили выше
+  //   const clientId = currentUser?.id ? Number(currentUser.id) : null;
+
+  //   console.log("🏁 Запрашиваем меню из СУБД с ID клиента:", clientId);
+
+  //   Promise.all([fetchMenu(clientId), fetchCategories()])
+  //     .then(([menuResponse, catResponse]) => {
+  //       // Безопасно парсим меню
+  //       const menuData = Array.isArray(menuResponse.data) ? menuResponse.data : [];
+  //       setMenuItems(menuData);
+
+  //       // cite: 2
+  //       // Безопасно парсим категории: проверяем, массив ли это
+  //       const categoriesData = Array.isArray(catResponse.data) ? catResponse.data : [];
+  //       const dbCategories = categoriesData.map(c => c.category_name);
+        
+  //       setCategories(['Все', ...dbCategories]);
+  //       setLoading(false);
+  //     })
+  //     .catch(err => { 
+  //       console.error("🚨 Ошибка PostgreSQL при загрузке меню:", err); 
+  //       setLoading(false); 
+  //     });
+  // }, [currentUser]); 
+  
+
+
+
+    // Надежный хук загрузки меню с лайками из СУБД
   useEffect(() => {
     setLoading(true);
     // Берем ID напрямую из стейта, который мы гарантированно восстановили выше
@@ -57,16 +88,46 @@ function App() {
 
     Promise.all([fetchMenu(clientId), fetchCategories()])
       .then(([menuResponse, catResponse]) => {
-        setMenuItems(menuResponse.data || []);
-        const dbCategories = catResponse.data.map(c => c.category_name);
+        // 1. Безопасный парсинг меню
+        const menuData = Array.isArray(menuResponse.data) ? menuResponse.data : (menuResponse.data?.results || []);
+        setMenuItems(menuData);
+
+        // 2. УМНЫЙ И БЕЗОПАСНЫЙ ПАРСИНГ КАТЕГОРИЙ (Исправляет e.slice)
+        let categoriesData = [];
+        
+        if (catResponse && catResponse.data) {
+            if (Array.isArray(catResponse.data)) {
+                // Если Django вернул чистый массив: [ {category_name: 'Пицца'}, ... ]
+                categoriesData = catResponse.data;
+            } else if (catResponse.data.results && Array.isArray(catResponse.data.results)) {
+                // Если в Django включена пагинация, данные лежат в ключе results
+                categoriesData = catResponse.data.results;
+            } else if (typeof catResponse.data === 'object') {
+                // Если пришел один объект или странная структура
+                categoriesData = Object.values(catResponse.data).filter(item => typeof item === 'object');
+            }
+        }
+
+        // Извлекаем имена категорий. Если поле называется иначе, подставьте свое вместо category_name
+        const dbCategories = categoriesData
+            .map(c => c.category_name || c.name || (typeof c === 'string' ? c : null))
+            .filter(Boolean); // удаляем пустые значения, если они появились
+        
         setCategories(['Все', ...dbCategories]);
         setLoading(false);
       })
-      .catch(err => { 
-        console.error("🚨 Ошибка PostgreSQL при загрузке меню:", err); 
-        setLoading(false); 
+      .catch(err => {
+        console.error("🚨 Ошибка при получении данных с Render:", err);
+        setCategories(['Все']); // Сайт не упадет в белый экран, останется кнопка "Все"
+        setLoading(false);
       });
   }, [currentUser]); 
+
+
+
+
+ 
+
 
   // Просмотр активных заказов (get_client_active_order)
   const handleOpenActiveOrders = () => {
