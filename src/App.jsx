@@ -123,6 +123,10 @@ function App() {
         setLoading(false);
       })
       .catch(err => {
+        console.log("❌ ПОЛНЫЙ ОБЪЕКТ ОШИБКИ:", err);
+        console.log("📡 СТАТУС ОТВЕТА СЕРВЕРА:", err.response?.status);
+        console.log("💾 ТЕКСТ ОТВЕТА СЕРВЕРА:", err.response?.data);
+
         console.error("🚨 Ошибка при получении данных с Render:", err);
         setCategories(['Все']); // Сайт не упадет в белый экран, останется кнопка "Все"
         setLoading(false);
