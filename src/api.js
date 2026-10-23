@@ -114,7 +114,7 @@ import axios from 'axios';
 
 
 const API = axios.create({
-    baseURL: 'https:web-delivery-back//onrender.com', 
+    baseURL: 'https://web-delivery-back.onrender.com', 
     timeout: 30000, // 30 секунд ожидания для прогрева бесплатного Render
     headers: {
         'Content-Type': 'application/json',
