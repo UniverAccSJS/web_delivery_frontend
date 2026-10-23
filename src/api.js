@@ -105,7 +105,7 @@ const getBaseURL = () => {
 const API = axios.create({
     baseURL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://127.0.0.1:8000'
-        : 'https://onrender.com', 
+        : 'https:web-delivery-back//onrender.com', 
     timeout: 30000, // 30 секунд ожидания для прогрева бесплатного Render
     headers: {
         'Content-Type': 'application/json',
