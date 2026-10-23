@@ -88,15 +88,7 @@
 
 import axios from 'axios';
 
-const API = axios.create({
-    // Оставляем чистый домен бэкенда
-    //baseURL: 'http://127.0.0.1:8000',
-    baseURL: getBaseURL,
-    timeout: 5000,
-    headers: {
-        'Content-Type': 'application/json',
-    }
-});
+
 
 // 1. Динамический выбор URL бэкенда в зависимости от режима запуска проекта
 const getBaseURL = () => {
@@ -108,6 +100,17 @@ const getBaseURL = () => {
     // ЗАМЕНИТЕ НА СВОЙ РЕАЛЬНЫЙ АДРЕС ВЕБ-СЕРВИСА ИЗ ПАНЕЛИ RENDER
     return 'https://web-delivery-back.onrender.com'; 
 };
+
+
+const API = axios.create({
+    // Оставляем чистый домен бэкенда
+    //baseURL: 'http://127.0.0.1:8000',
+    baseURL: getBaseURL,
+    timeout: 5000,
+    headers: {
+        'Content-Type': 'application/json',
+    }
+});
 
 // // 2. Достаем токен DRF напрямую перед созданием инстанса
 // const token = localStorage.getItem('restaurant_token');
