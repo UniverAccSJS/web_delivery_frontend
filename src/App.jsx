@@ -88,6 +88,12 @@ function App() {
 
     Promise.all([fetchMenu(clientId), fetchCategories()])
       .then(([menuResponse, catResponse]) => {
+
+
+         // ДОБАВЬТЕ ЭТИ ДВЕ СТРОЧКИ ДЛЯ ПРОВЕРКИ:
+        console.log("🍏 РЕАЛЬНЫЙ ОТВЕТ МЕНЮ С СЕРВЕРА:", menuResponse.data);
+        console.log("🍎 РЕАЛЬНЫЙ ОТВЕТ КАТЕГОРИЙ С СЕРВЕРА:", catResponse.data);
+
         // 1. Безопасный парсинг меню
         const menuData = Array.isArray(menuResponse.data) ? menuResponse.data : (menuResponse.data?.results || []);
         setMenuItems(menuData);
