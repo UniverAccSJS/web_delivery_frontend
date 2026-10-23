@@ -44,7 +44,7 @@ const UserProfileModal = ({ currentUser, isOpen, onClose, addToCart, setMenuItem
 
   const handleDownloadReceipt = (orderId, e) => {
     e.stopPropagation();
-    // const downloadUrl = `http://127.0.0.1:8000/api/orders/${orderId}/receipt/`;  // сервер локалхост
+    //const downloadUrl = `http://127.0.0.1:8000/api/orders/${orderId}/receipt/`;  // сервер локалхост
     const downloadUrl = `${baseURL}/api/orders/${orderId}/receipt/`;  // настройка для GP
     window.location.href = downloadUrl;
   };
@@ -67,7 +67,16 @@ const UserProfileModal = ({ currentUser, isOpen, onClose, addToCart, setMenuItem
 
     fetchClientAddresses(currentUser.id).then(res => setAddresses(res.data || [])).catch(console.error);
     fetchClientHistory(currentUser.id).then(res => setOrderHistory(res.data || [])).catch(console.error);
-    fetchClientFavorites(currentUser.id).then(res => setFavoritesItems(res.data || [])).catch(console.error);
+
+    fetchClientFavorites(currentUser.id)
+      .then(res => {
+        const favData = Array.isArray(res.data) ? res.data : (res.data?.results || []);
+        setFavoritesItems(favData);
+      })
+      .catch(console.error);
+
+
+
     fetchClientCards(currentUser.id).then(res => {
       const dataFromDb = res && res.data !== undefined ? res.data : res;
       setClientCards(Array.isArray(dataFromDb) ? dataFromDb : []);
