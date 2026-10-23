@@ -96,7 +96,7 @@ const getBaseURL = () => {
     }
     // Если сайт запущен на GitHub Pages — автоматически переключаемся на Render
     // ЗАМЕНИТЕ НА СВОЙ РЕАЛЬНЫЙ АДРЕС ВЕБ-СЕРВИСА ИЗ ПАНЕЛИ RENDER
-    return 'https://onrender.com'; 
+    return 'https://web-delivery-back.onrender.com'; 
 };
 
 // // 2. Достаем токен DRF напрямую перед созданием инстанса
