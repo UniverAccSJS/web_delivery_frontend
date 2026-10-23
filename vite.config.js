@@ -4,5 +4,6 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/web_delivery_frontend/'
+  // base: '/web_delivery_frontend/'
+  base: 'https://github.com/UniverAccSJS/web_delivery_frontend/'
 })
