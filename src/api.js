@@ -87,7 +87,7 @@
 
 
 import axios from 'axios';
-export const baseURL = getBaseURL();
+// export const baseURL = getBaseURL();
 
 // 1. Динамический выбор URL бэкенда в зависимости от режима запуска проекта
 const getBaseURL = () => {
@@ -103,8 +103,8 @@ const getBaseURL = () => {
 const API = axios.create({
     // Оставляем чистый домен бэкенда
     //baseURL: 'http://127.0.0.1:8000',
-    //baseURL: getBaseURL(),
-    baseURL: baseURL,
+    baseURL: getBaseURL(),
+    // baseURL: baseURL,
     timeout: 30000,
     headers: {
         'Content-Type': 'application/json',
