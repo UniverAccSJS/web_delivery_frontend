@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { baseURL } from '../api'
+//import { baseURL } from '../api'
+import API from '../api'
 
 import { 
   fetchClientAddresses, fetchClientHistory, manageClientAddress, 
@@ -45,7 +46,8 @@ const UserProfileModal = ({ currentUser, isOpen, onClose, addToCart, setMenuItem
   const handleDownloadReceipt = (orderId, e) => {
     e.stopPropagation();
     //const downloadUrl = `http://127.0.0.1:8000/api/orders/${orderId}/receipt/`;  // сервер локалхост
-    const downloadUrl = `${baseURL}/api/orders/${orderId}/receipt/`;  // настройка для GP
+    //const downloadUrl = `${baseURL}/api/orders/${orderId}/receipt/`;  // настройка для GP
+    const downloadUrl = `${API.defaults.baseURL}/api/orders/${orderId}/receipt/`;  // настройка для GP
     window.location.href = downloadUrl;
   };
 
